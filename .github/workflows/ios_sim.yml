@@ -78,6 +78,3 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with: { retention-days: 1, name: ekranlar-video, path: "out/shots\nout/kayit.mp4\n~/.maestro/tests" }
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: { retention-days: 1, name: app-zip, path: out/appetize_yukle.zip }
