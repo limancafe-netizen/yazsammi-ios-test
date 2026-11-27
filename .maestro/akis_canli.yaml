@@ -1,0 +1,42 @@
+appId: com.yazsammi.app
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 60000
+- takeScreenshot: 01_acilis
+- runFlow:
+    when:
+      visible: "Reddet"
+    commands:
+      - takeScreenshot: 02_olcum_bandi
+      - tapOn: "Reddet"
+- takeScreenshot: 03_kapi
+- runFlow:
+    when:
+      visible: "Haber ver"
+    commands:
+      - takeScreenshot: 04_bildirim_aciklama
+      - tapOn: "Haber ver"
+      - runFlow:
+          when:
+            visible: "Allow|İzin Ver|İzin ver"
+          commands:
+            - takeScreenshot: 05_sistem_izni
+            - tapOn: "Allow|İzin Ver|İzin ver"
+- takeScreenshot: 06_ana_ekran
+- tapOn: { text: "Oyun", optional: true }
+- takeScreenshot: 10_oyun
+- tapOn: { text: "Ekonomi", optional: true }
+- takeScreenshot: 11_ekonomi
+- tapOn: { text: "Astroloji", optional: true }
+- takeScreenshot: 12_astroloji
+- tapOn: { text: "Tarot.*", optional: true }
+- takeScreenshot: 13_tarot
+- tapOn: { text: "Ben", optional: true }
+- takeScreenshot: 30_ben
+- scrollUntilVisible: { element: "Plus ve haklarım", timeout: 5000, optional: true }
+- takeScreenshot: 31_plus_haklar
+- tapOn: { text: "Ayarlar", optional: true }
+- takeScreenshot: 40_ayarlar
