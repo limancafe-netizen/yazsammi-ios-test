@@ -1,0 +1,83 @@
+name: ios-sanal-deneme
+on: workflow_dispatch
+jobs:
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      EXPO_PUBLIC_SUNUCU: deneme
+      EXPO_PUBLIC_YEREL_SUNUCU: http://127.0.0.1:8787
+      DENEME_URL: ${{ secrets.TEST_SUNUCU_URL }}
+      EXPO_PUBLIC_TEST_SUNUCU: ${{ secrets.TEST_SUNUCU_URL }}
+      EXPO_PUBLIC_GOOGLE_ISTEMCI: ${{ secrets.GOOGLE_ISTEMCI }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: npm ci
+        run: npm ci || npm ci --legacy-peer-deps
+      - name: prebuild
+        run: npx expo prebuild -p ios --clean
+      - name: derle (imzasiz, simulator)
+        run: |
+          cd ios
+          WS=$(ls -d *.xcworkspace | head -1); SCHEME="${WS%.xcworkspace}"
+          xcodebuild -workspace "$WS" -scheme "$SCHEME" -sdk iphonesimulator -configuration Release \
+            -destination 'generic/platform=iOS Simulator' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build 2>&1 | tail -n 60
+          APP=$(find build/Build/Products -name "*.app" -maxdepth 3 | head -1); echo "APP=$APP"
+          mkdir -p ../out && cp -R "$APP" ../out/ && cd ../out && zip -qr appetize_yukle.zip *.app
+      - name: simulator ac
+        run: |
+          xcrun simctl list devices available | head -30
+          UDID=$(xcrun simctl list devices available | grep -E "iPhone 1[5-9]" | tail -1 | grep -oE "[0-9A-F-]{36}")
+          [ -z "$UDID" ] && UDID=$(xcrun simctl list devices available | grep iPhone | head -1 | grep -oE "[0-9A-F-]{36}")
+          echo "UDID=$UDID" >> $GITHUB_ENV
+          xcrun simctl boot "$UDID"; xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" out/*.app
+      - name: maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          token_format: id_token
+          id_token_audience: ${{ secrets.TEST_SUNUCU_URL }}
+          id_token_include_email: true
+      - name: akis + kayit + push
+        continue-on-error: true
+        env:
+          JETON: ${{ steps.auth.outputs.id_token }}
+        run: |
+          HEDEF="$DENEME_URL" node .ci/vekil.js & PRX=$!; sleep 2
+          curl -s -o /dev/null -w "vekil_saglik=%{http_code}" http://127.0.0.1:8787/saglik || true
+          for i in $(seq 1 30); do C=$(curl -s -o /dev/null -w "%{http_code}" -H "Content-Type: application/json" -d '{"test":"iosdenetim25"}' http://127.0.0.1:8787/c/giris); echo "isinma $i $C"; [ "$C" != "503" ] && [ "$C" != "000" ] && break; sleep 5; done
+          export PATH="$HOME/.maestro/bin:$PATH"
+          mkdir -p out/shots
+          xcrun simctl io "$UDID" recordVideo --codec h264 out/kayit.mp4 & REC=$!
+          (cd out/shots && maestro test --device "$UDID" ../../.maestro/akis.yaml) || echo "maestro hata"
+          cat > push.json <<'P'
+          {"aps":{"alert":{"title":"Yazsam mi?","body":"Deneme bildirimi"},"sound":"default"}}
+          P
+          xcrun simctl launch "$UDID" com.yazsammi.app; sleep 3
+          xcrun simctl push "$UDID" com.yazsammi.app push.json || true; sleep 3; xcrun simctl io "$UDID" screenshot out/shots/11_push_on_planda.png
+          xcrun simctl launch "$UDID" com.apple.Preferences || true; sleep 3
+          xcrun simctl push "$UDID" com.yazsammi.app push.json || echo "push hata"
+          sleep 4; xcrun simctl io "$UDID" screenshot out/shots/12_push_arka_planda.png
+          kill -INT $REC || true; sleep 3
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { retention-days: 1, name: ekranlar, path: "out/shots
+~/.maestro/tests" }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { retention-days: 1, name: ekranlar-video, path: "out/shots\nout/kayit.mp4\n~/.maestro/tests" }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { retention-days: 1, name: app-zip, path: out/appetize_yukle.zip }

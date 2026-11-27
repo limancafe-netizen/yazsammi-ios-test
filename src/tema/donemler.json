@@ -1,0 +1,11 @@
+{
+  "_aciklama": "TEK KAYNAK: markanın dönem paleti (Onur 02.10 + 07.10: marka/uygulama rengi DÖNEMLİK). Uygulama (tema/donem.ts), site (onizleme/index.js, /marka/donem.json) ve sosyal medya/video üretimi bu dosyayı okur. Renk değişikliği yalnız burada yapılır. aylar: Türkiye saatine göre ay numaraları. simge: logonun 3 rengi (zemin, 'Yazsam' yazısı, 'mı?'), dosya kod/site/marka/simge-<ad>.svg ve profil-<ad>.svg ile BİREBİR (08.10: Fuşya pembe zemin, Lavanta açık lavanta zemin; Onur onayı). Açık zeminli dönemlerde koyu arka plan gereken yerler (kurucu amblemi, video gece zemini) #16112A kullanır.",
+  "donemler": {
+    "gece":    { "isim": "Gece",            "aylar": [9, 10, 11], "simge": { "zemin": "#16112A", "yazi": "#FFFFFF", "mi": "#FF5C6C" }, "vurgu": { "gunduz": "#D93245", "gece": "#FF5C6C" }, "kapak": ["#16112A", "#FF5C6C"], "tespit": [["#16112A", "#5A2340", "#FF5C6C"], ["#FF5C6C", "#E0405F", "#2A1B45"]] },
+    "mor":     { "isim": "Elektrik moru",   "aylar": [12, 1],     "simge": { "zemin": "#5B2EFF", "yazi": "#FFFFFF", "mi": "#FFB3C7" }, "vurgu": { "gunduz": "#5B2EFF", "gece": "#8F72FF" }, "kapak": ["#5B2EFF", "#FFB3C7"], "tespit": [["#5B2EFF", "#9B3FD6", "#FF4F8B"], ["#3B1FB8", "#5B2EFF", "#FFB3C7"]] },
+    "fusya":   { "isim": "Fuşya",           "aylar": [2],         "simge": { "zemin": "#FF4F8B", "yazi": "#FFFFFF", "mi": "#16112A" }, "vurgu": { "gunduz": "#D92E6E", "gece": "#FF4F8B" }, "kapak": ["#16112A", "#FF4F8B"], "tespit": [["#16112A", "#5A1E4A", "#FF4F8B"], ["#FF4F8B", "#D92E6E", "#2A1B45"]] },
+    "lavanta": { "isim": "Lavanta",         "aylar": [3, 4, 5],   "simge": { "zemin": "#E7DEFF", "yazi": "#16112A", "mi": "#E2283F" }, "vurgu": { "gunduz": "#6A4FD6", "gece": "#C3B2FF" }, "kapak": ["#16112A", "#B7A3F5"], "tespit": [["#16112A", "#4B3D7A", "#B7A3F5"], ["#B7A3F5", "#8E73E8", "#E2283F"]] },
+    "mavi":    { "isim": "Elektrik mavisi", "aylar": [6, 7, 8],   "simge": { "zemin": "#2F5BFF", "yazi": "#FFFFFF", "mi": "#FFB3C7" }, "vurgu": { "gunduz": "#2F5BFF", "gece": "#6F8CFF" }, "kapak": ["#2F5BFF", "#FFB3C7"], "tespit": [["#2F5BFF", "#5B2EFF", "#B04DFF"], ["#1B3FD1", "#2F5BFF", "#FFB3C7"]] }
+  },
+  "kurucuAltin": ["#FBEBB5", "#E9BE5A", "#B8862A", "#F5D886"]
+}

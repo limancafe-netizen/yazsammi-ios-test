@@ -1,0 +1,167 @@
+appId: com.yazsammi.app
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Test girişi"
+    timeout: 60000
+- takeScreenshot: 01_giris
+- runFlow:
+    when:
+      visible: "Reddet"
+    commands:
+      - takeScreenshot: 01b_olcum_bandi
+      - tapOn: "Reddet"
+- tapOn: "Test girişi"
+- takeScreenshot: 01c_test_form
+- tapOn: "test adı"
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- inputText: "iosdenetim25"
+- tapOn:
+    text: "Hesabınla devam et"
+    optional: true
+- tapOn: "Gir"
+- extendedWaitUntil:
+    notVisible: "Hesabınla devam et"
+    timeout: 30000
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 15000
+- takeScreenshot: 02_giris_sonrasi
+- runFlow:
+    when:
+      visible: "Haber ver"
+    commands:
+      - takeScreenshot: 03_bildirim_aciklama
+      - tapOn: "Haber ver"
+      - runFlow:
+          when:
+            visible: "Allow|İzin Ver|İzin ver"
+          commands:
+            - takeScreenshot: 04_sistem_izni
+            - tapOn: "Allow|İzin Ver|İzin ver"
+- takeScreenshot: 05_ana_ekran
+- runFlow:
+    when:
+      visible: "Kabul.*|Tamam"
+    commands:
+      - takeScreenshot: 06_olcum_bandi
+      - tapOn: "Kabul.*|Tamam"
+# --- ust bolum cipleri
+- tapOn: { text: "Oyun", optional: true }
+- takeScreenshot: 10_oyun
+- tapOn: { text: 'Fener: dokun.*', optional: true }
+- takeScreenshot: 15_oyun_figur
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: "Ekonomi", optional: true }
+- takeScreenshot: 11_ekonomi
+- tapOn: { text: "__dump_11_ekonomi", optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: "Astroloji", optional: true }
+- takeScreenshot: 12_astroloji
+- tapOn: { text: "__dump_12_astroloji", optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: "Tarot.*", optional: true }
+- takeScreenshot: 13_tarot
+- tapOn: { text: "__dump_13_tarot", optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+- tapOn: { text: 'Yazsam mı.*ana sayfa.*', optional: true }
+# --- figur sohbeti (Kahin odasi) + bildirim karti
+- tapOn: { text: 'Fener, asistan.*', optional: true }
+- takeScreenshot: 16_kahin_oda
+- tapOn: { text: "__dump_kahin", optional: true }
+- runFlow:
+    when:
+      visible: 'Evet, haber ver'
+    commands:
+      - takeScreenshot: 03_bildirim_karti
+      - tapOn: 'Evet, haber ver'
+      - runFlow:
+          when:
+            visible: 'Allow|İzin Ver|İzin ver'
+          commands:
+            - takeScreenshot: 04_sistem_izni
+            - tapOn: 'Allow|İzin Ver|İzin ver'
+# --- alt sekmeler
+- tapOn: { text: "Sohbet", optional: true }
+- takeScreenshot: 20_sohbet
+- tapOn: { text: "Yankı", optional: true }
+- takeScreenshot: 21_yanki
+- tapOn: { text: "Canlı", optional: true }
+- takeScreenshot: 22_canli
+- tapOn: { text: "Yaz", optional: true }
+- takeScreenshot: 23_yaz
+- tapOn: { point: "11%,22%", optional: true }
+- tapOn: { text: "Ben", optional: true }
+- takeScreenshot: 30_ben
+- tapOn: { text: "__dump_ben", optional: true }
+- scrollUntilVisible: { element: "Plus ve haklarım", timeout: 8000, optional: true }
+- takeScreenshot: 31_plus_haklar
+- scroll
+- takeScreenshot: 32_ben_alt
+- scrollUntilVisible: { direction: UP, element: "Ayarlar", timeout: 8000, optional: true }
+- tapOn: { text: "Ayarlar", optional: true }
+- takeScreenshot: 40_ayarlar
+- scrollUntilVisible: { element: "Bildirim sesi", timeout: 8000, optional: true }
+- takeScreenshot: 41_ayar_bildirim
+- tapOn: { text: "Anlık bildirimler", optional: true }
+- extendedWaitUntil: { visible: "Allow|İzin Ver|İzin ver|Don.t Allow", timeout: 6000, optional: true }
+- takeScreenshot: 41b_sistem_izni
+- runFlow:
+    when:
+      visible: "Allow|İzin Ver|İzin ver"
+    commands:
+      - tapOn: "Allow|İzin Ver|İzin ver"
+- takeScreenshot: 41c_izin_sonrasi
+- scrollUntilVisible: { element: "Kullanım sayımı", timeout: 8000, optional: true }
+- takeScreenshot: 42_ayar_gizlilik
+- scrollUntilVisible: { element: "Çıkış yap", timeout: 8000, optional: true }
+- takeScreenshot: 43_ayar_alt
+- tapOn: { text: "Çıkış yap", optional: true }
+- runFlow:
+    when:
+      visible: "Çık|Evet|Tamam"
+    commands:
+      - takeScreenshot: 44_cikis_onay
+      - tapOn: "Çıkış yap|Çık|Evet|Tamam"
+- takeScreenshot: 45_cikis_sonrasi
+- runFlow:
+    when:
+      visible: "Test girişi"
+    commands:
+      - tapOn: "Test girişi"
+      - tapOn: "test adı"
+      - runFlow:
+          when:
+            visible: "Continue"
+          commands:
+            - tapOn: "Continue"
+      - inputText: "iosdenetim25"
+      - tapOn: { text: 'Hesabınla devam et', optional: true }
+      - tapOn: "Gir"
+      - extendedWaitUntil:
+          notVisible: "Hesabınla devam et"
+          timeout: 30000
+      - takeScreenshot: 46_yeniden_giris
+- takeScreenshot: 50_son
+# --- figur sohbeti: Ayarlar > 'Yazsam mı.* ile yaz'
+- tapOn: { text: "Ben", optional: true }
+- tapOn: { text: "Ayarlar", optional: true }
+- scrollUntilVisible: { element: 'Yazsam mı.* ile yaz', timeout: 8000, optional: true }
+- tapOn: { text: 'Yazsam mı.* ile yaz', optional: true }
+- takeScreenshot: 60_figur_sohbet
+- tapOn: { text: "__dump_figur", optional: true }
+- runFlow:
+    when:
+      visible: "Evet, haber ver"
+    commands:
+      - takeScreenshot: 61_bildirim_karti
+      - tapOn: "Evet, haber ver"
+      - takeScreenshot: 62_kart_sonrasi
