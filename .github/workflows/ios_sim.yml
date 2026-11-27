@@ -3,7 +3,7 @@ on: workflow_dispatch
 jobs:
   ios:
     runs-on: macos-latest
-    timeout-minutes: 40
+    timeout-minutes: 100
     permissions:
       contents: read
       id-token: write
